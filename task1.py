@@ -85,6 +85,10 @@ def create_test_image(width=400, height=300):
     """
     Vytvoření testovacího barevného obrazu.
     
+    Args:
+        width: Šířka testovacího obrazu (default: 400)
+        height: Výška testovacího obrazu (default: 300)
+    
     Returns:
         test_image: numpy array s RGB testovacím obrazem
     """
@@ -107,6 +111,18 @@ def create_test_image(width=400, height=300):
     test_image[:, 5*stripe_width:, :] = [255, 0, 255]
     
     return test_image
+
+
+def calculate_psnr(original, reconstructed):
+    """
+    Vypočítá Peak Signal-to-Noise Ratio (PSNR) mezi dvěma obrazy.
+    """
+    mse = np.mean((original.astype(np.float64) - reconstructed.astype(np.float64)) ** 2)
+    if mse == 0:
+        return float('inf')
+    max_pixel = 255.0
+    psnr = 20 * np.log10(max_pixel / np.sqrt(mse))
+    return psnr
 
 
 def visualize_conversion(original_rgb, yuv_image, reconstructed_rgb):
@@ -201,18 +217,6 @@ def main():
     print("\n" + "=" * 60)
     print("Konverze dokončena!")
     print("=" * 60)
-
-
-def calculate_psnr(original, reconstructed):
-    """
-    Vypočítá Peak Signal-to-Noise Ratio (PSNR) mezi dvěma obrazy.
-    """
-    mse = np.mean((original.astype(np.float64) - reconstructed.astype(np.float64)) ** 2)
-    if mse == 0:
-        return float('inf')
-    max_pixel = 255.0
-    psnr = 20 * np.log10(max_pixel / np.sqrt(mse))
-    return psnr
 
 
 if __name__ == "__main__":
